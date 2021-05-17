@@ -1,0 +1,6 @@
+*.dc
+*.graph
+/.idea
+/.git
+/__pycache__
+data/*.json

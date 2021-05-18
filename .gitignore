@@ -2,5 +2,7 @@
 *.graph
 /.idea
 /.git
-/__pycache__
+*/__pycache__
+/venv
 data/*.json
+*.pyc

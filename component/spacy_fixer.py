@@ -1,6 +1,9 @@
 from nltk import WordNetLemmatizer
 from sekg.text.extractor.domain_entity.word_util import WordUtil
 from spacy.tokens.doc import Doc
+"""
+spacy相关的工具类
+"""
 
 
 class SoftwareTextPOSFixer:

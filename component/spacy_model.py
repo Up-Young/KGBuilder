@@ -2,6 +2,9 @@ import spacy
 from spacy import Language
 from component.sentenceHandler import SentenceHandler
 from component.spacy_fixer import SoftwareTextPOSFixer
+"""
+spacy相关的工具类，用于将文档句子解析成doc对象
+"""
 
 
 @Language.factory("fixer_for_pos")

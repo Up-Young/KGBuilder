@@ -1,5 +1,8 @@
 import re
 from bs4 import BeautifulSoup
+"""
+一个用于过滤文档中的HTML标签的工具类
+"""
 
 
 class HtmlExtractor:

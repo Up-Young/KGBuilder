@@ -14,6 +14,9 @@ from sekg.pipeline.component.api_importer.model import APIRelation, APIEntity
 from sekg.pipeline.component.base import Component
 from component.spacy_model import spacy_model
 from component.html_extracter import HtmlExtractor
+"""
+API知识图谱构建的主要功能实现类，通过创建api_importer_component类的实例可以将传入的JAVA源码解析结果构建成知识图谱。
+"""
 
 
 def search_field_id_dict(f_c_list, f_id):

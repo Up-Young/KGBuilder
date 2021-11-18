@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 
@@ -28,22 +29,23 @@ public class Tools {
     public static String ImportPath = "srcCode";
     public static String OutputPath = "parseResult";
 
-    public static void writeModelListToJson(String filename, Collection<?> entityModelList) {
+    public static void writeModelListToJson(Path file_path_and_name, Collection<?> entityModelList) {
         try {
             if (!(entityModelList.size() > 0)) {
                 return;
             }
-            System.out.println(filename);
+            System.out.println(file_path_and_name);
 
-            Files.write(Paths.get(filename), JSON.toJSONString(entityModelList).getBytes());
+            Files.write(file_path_and_name, JSON.toJSONString(entityModelList).getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void writeToJson(String FilePath, Collection<?> entityModelList, String filename){
+    public static void writeToJson(String FilePath, Collection<?> entityModelList, String filename) {
         System.out.println("-------start write--------");
-        writeModelListToJson(FilePath+"\\"+filename, entityModelList);
+        Path file_path_with_name = Paths.get(FilePath, filename);
+        writeModelListToJson(file_path_with_name, entityModelList);
         System.out.println("-------finish write--------");
     }
 }

@@ -17,6 +17,10 @@ import static util.Tools.*;
 
 public class RelationParser {
     public static void main(String[] args) {
+        parseRelation();
+    }
+
+    public static void parseRelation(){
         ClassAndPackageVisitor visitor = new ClassAndPackageVisitor();
         JavaParser javaParser = new JavaParser();
         TypeSolver reflectionTypeSolver = new ReflectionTypeSolver(false);
@@ -28,7 +32,7 @@ public class RelationParser {
         javaParser.getParserConfiguration().setSymbolResolver(symbolSolver);
         File projectDir = new File(ImportPath);
         List<String> pathList = GetJavaFiles.listClasses(projectDir);
-        for(String path : pathList) {
+        for (String path : pathList) {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             FutureTask<Boolean> future =
                     new FutureTask<Boolean>(new Callable<Boolean>() {//使用Callable接口作为构造参数
@@ -42,7 +46,7 @@ public class RelationParser {
                                     visitor.parseClassInterface(cu, packageName);
                                     System.out.println("\r\n");
                                 }
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             return true;

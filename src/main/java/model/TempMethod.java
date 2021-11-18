@@ -21,48 +21,119 @@ public class TempMethod {
     private List<Pair<String, String>> returnCodeDirective;
     private List<String> modifierList;
 
-    public TempMethod(){
+    public TempMethod() {
 
     }
-    public List<String> getModifierList() {return  modifierList;}
-    public void setModifierList(List<String> modifierList){this.modifierList = modifierList;}
 
-    public String getDescription() { return description; }
-    public void setDescription(String description){this.description = description;}
+    public List<String> getModifierList() {
+        return modifierList;
+    }
 
-    public String getMethodName() { return methodName; }
-    public void setMethodName(String methodName){this.methodName = methodName;}
+    public void setModifierList(List<String> modifierList) {
+        this.modifierList = modifierList;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name){this.name = name;}
+    public String getDescription() {
+        return description;
+    }
 
-    public List<String> getParameter() { return parameter; }
-    public void setParameter(List<String> parameter){this.parameter = parameter;}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public List<String> getParameterTypeList() { return parameterTypeList; }
-    public void setParameterTypeList(List<String> parameterTypeList){this.parameterTypeList = parameterTypeList;}
+    public String getMethodName() {
+        return methodName;
+    }
 
-    public List<String> getThrowException() { return throwException; }
-    public void setThrowException(List<String> throwException){this.throwException = throwException;}
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
 
-    public void setParamsTag(List<Pair<String, String>> paramsTag){this.paramsTag = paramsTag;}
-    public List<Pair<String, String>> getParamsTag(){return paramsTag;}
+    public String getName() {
+        return name;
+    }
 
-    public void setThrowsTag(List<Pair<String, String>> throwsTag){this.throwsTag = throwsTag;}
-    public List<Pair<String, String>> getThrowsTag(){ return throwsTag; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public void setReturnValueDescription(String returnValueDescription){this.returnValueDescription = returnValueDescription;}
-    public String getReturnValueDescription(){ return returnValueDescription; }
+    public List<String> getParameter() {
+        return parameter;
+    }
 
-    public void setBelongClass(String belongClass){this.belongClass = belongClass;}
-    public String getBelongClass(){return belongClass; }
+    public void setParameter(List<String> parameter) {
+        this.parameter = parameter;
+    }
 
-    public void setReturnValueType(String returnValueType){this.returnValueType = returnValueType;}
-    public String getReturnValueType(){return returnValueType; }
+    public List<String> getParameterTypeList() {
+        return parameterTypeList;
+    }
 
-    public void setThrowsCodeDirective(List<Pair<String, String>> throwsCodeDirective){ this.throwsCodeDirective = throwsCodeDirective; }
-    public List<Pair<String, String>> getThrowsCodeDirective(){ return throwsCodeDirective;}
+    public void setParameterTypeList(List<String> parameterTypeList) {
+        this.parameterTypeList = parameterTypeList;
+    }
 
-    public void setReturnCodeDirective(List<Pair<String, String>> returnCodeDirective){ this.returnCodeDirective = returnCodeDirective; }
-    public List<Pair<String, String>> getReturnCodeDirective(){ return returnCodeDirective; }
+    public List<String> getThrowException() {
+        return throwException;
+    }
+
+    public void setThrowException(List<String> throwException) {
+        this.throwException = throwException;
+    }
+
+    public void setParamsTag(List<Pair<String, String>> paramsTag) {
+        this.paramsTag = paramsTag;
+    }
+
+    public List<Pair<String, String>> getParamsTag() {
+        return paramsTag;
+    }
+
+    public void setThrowsTag(List<Pair<String, String>> throwsTag) {
+        this.throwsTag = throwsTag;
+    }
+
+    public List<Pair<String, String>> getThrowsTag() {
+        return throwsTag;
+    }
+
+    public void setReturnValueDescription(String returnValueDescription) {
+        this.returnValueDescription = returnValueDescription;
+    }
+
+    public String getReturnValueDescription() {
+        return returnValueDescription;
+    }
+
+    public void setBelongClass(String belongClass) {
+        this.belongClass = belongClass;
+    }
+
+    public String getBelongClass() {
+        return belongClass;
+    }
+
+    public void setReturnValueType(String returnValueType) {
+        this.returnValueType = returnValueType;
+    }
+
+    public String getReturnValueType() {
+        return returnValueType;
+    }
+
+    public void setThrowsCodeDirective(List<Pair<String, String>> throwsCodeDirective) {
+        this.throwsCodeDirective = throwsCodeDirective;
+    }
+
+    public List<Pair<String, String>> getThrowsCodeDirective() {
+        return throwsCodeDirective;
+    }
+
+    public void setReturnCodeDirective(List<Pair<String, String>> returnCodeDirective) {
+        this.returnCodeDirective = returnCodeDirective;
+    }
+
+    public List<Pair<String, String>> getReturnCodeDirective() {
+        return returnCodeDirective;
+    }
 }

@@ -10,13 +10,14 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import model.TempMethod;
 import util.GetJavaFiles;
+import visitor.ConstructorVisitor;
+import visitor.MethodVisitor;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-import visitor.ConstructorVisitor;
-import visitor.MethodVisitor;
 import static util.Tools.*;
 
 
@@ -25,7 +26,11 @@ public class MethodParser {
     public static MethodVisitor methodVisitor = new MethodVisitor();
     public static ConstructorVisitor constructorVisitor = new ConstructorVisitor();
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
+        parseMethod();
+    }
+
+    public static void parseMethod(){
         JavaParser javaParser = new JavaParser();
         TypeSolver reflectionTypeSolver = new ReflectionTypeSolver(false);
         TypeSolver javaParserTypeSolver_1 = new JavaParserTypeSolver(new File(ImportPath));
@@ -37,28 +42,28 @@ public class MethodParser {
         //使用CombinedTypeSolver替换ReflectionTypeSolver后可以解析出更多来自param和throws的type。
         File projectDir = new File(ImportPath);
         List<String> pathList = GetJavaFiles.listClasses(projectDir);
-        for(String path : pathList) {
+        for (String path : pathList) {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             FutureTask<Boolean> future =
                     new FutureTask<Boolean>(new Callable<Boolean>() {//使用Callable接口作为构造参数
                         @Override
                         public Boolean call() {
                             //在对文件进行遍历的层次进行计时 如果这个文件跑了超过15s还没跑完 说明可能进入死循环了
-                            try{
+                            try {
                                 ParseResult<CompilationUnit> result = javaParser.parse(new File(path));
                                 CompilationUnit cu = result.getResult().get();
                                 List<MethodDeclaration> methodDeclarationList = cu.findAll(MethodDeclaration.class);
-                                for (MethodDeclaration methodDeclaration : methodDeclarationList){
+                                for (MethodDeclaration methodDeclaration : methodDeclarationList) {
                                     TempMethod tempMethod = methodVisitor.parseMethod(methodDeclaration);
                                     methodModelSet.add(tempMethod);
                                 }
                                 List<ConstructorDeclaration> constructorDeclarationList = cu.findAll(ConstructorDeclaration.class);
-                                for (ConstructorDeclaration constructorDeclaration: constructorDeclarationList){
+                                for (ConstructorDeclaration constructorDeclaration : constructorDeclarationList) {
                                     TempMethod tempMethod = constructorVisitor.parseConstructor(constructorDeclaration);
                                     methodModelSet.add(tempMethod);
                                 }
                                 return true;
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                                 return false;
                             }

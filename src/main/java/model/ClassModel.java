@@ -1,7 +1,5 @@
 package model;
 
-import java.util.List;
-
 public class ClassModel {
     private String qualified_name;
     private Integer type;

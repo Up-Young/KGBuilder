@@ -15,6 +15,7 @@ import model.ClassModel;
 import model.EntityModel;
 import model.FieldModel;
 import model.RelationModel;
+
 import java.util.*;
 
 import static util.Tools.*;
@@ -39,7 +40,7 @@ public class ClassAndPackageVisitor {
         this.entityModelSet.add(entityModel);
     }
 
-    private void addClassModel(String classOrInterfaceName, String name, Integer type, String code, String class_comment, List<Comment> AllComment){
+    private void addClassModel(String classOrInterfaceName, String name, Integer type, String code, String class_comment, List<Comment> AllComment) {
         recordName.add(classOrInterfaceName);
 
         ClassModel classyModel = new ClassModel();
@@ -87,8 +88,9 @@ public class ClassAndPackageVisitor {
                 String description = "";
                 String name = classOrInterfaceDeclaration.getName().asString();
                 Optional<String> classOrInterfaceNameOptional = classOrInterfaceDeclaration.getFullyQualifiedName();
-                if(classOrInterfaceNameOptional.isPresent()) classOrInterfaceName = classOrInterfaceDeclaration.getFullyQualifiedName().get();
-                if(classOrInterfaceName.equals("java.lang.Object")){
+                if (classOrInterfaceNameOptional.isPresent())
+                    classOrInterfaceName = classOrInterfaceDeclaration.getFullyQualifiedName().get();
+                if (classOrInterfaceName.equals("java.lang.Object")) {
                     System.out.println(classOrInterfaceName);
                 }
                 boolean isInterface = classOrInterfaceDeclaration.isInterface();
@@ -109,11 +111,11 @@ public class ClassAndPackageVisitor {
                 if (!packageName.equals("")) addRelationModelList(classOrInterfaceName, packageName, BELONGTO);
                 List<ClassOrInterfaceType> extendedTypeList = classOrInterfaceDeclaration.getExtendedTypes();
                 for (ClassOrInterfaceType extendedType : extendedTypeList) {
-                    try{
+                    try {
                         String extendName = extendedType.resolve().getQualifiedName();
                         System.out.println("extend " + extendName);
                         addRelationModelList(classOrInterfaceName, extendName, EXTEND);
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -123,15 +125,15 @@ public class ClassAndPackageVisitor {
                         String interfaceName = implementedType.resolve().getQualifiedName();
                         addRelationModelList(classOrInterfaceName, interfaceName, IMPLEMENT);
                         System.out.println("implemented " + interfaceName);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 Optional<Javadoc> javadocOptional = classOrInterfaceDeclaration.getJavadoc();
-                if(javadocOptional.isPresent()){
+                if (javadocOptional.isPresent()) {
                     Javadoc javadoc = javadocOptional.get();
                     description = javadoc.getDescription().toText();
-                    if(description.contains("{@inheritDoc}")) containsInheritdoc = true;
+                    if (description.contains("{@inheritDoc}")) containsInheritdoc = true;
                 }
                 // add field
                 List<FieldDeclaration> fieldDeclarationList = classOrInterfaceDeclaration.getFields();
@@ -141,9 +143,9 @@ public class ClassAndPackageVisitor {
                     StringBuilder declaration = new StringBuilder();
                     String comment = "";
 
-                    for(Modifier m : modifierList){
+                    for (Modifier m : modifierList) {
                         declaration.append(m.toString());
-                        System.out.println("modifierList: " +m.toString());
+                        System.out.println("modifierList: " + m.toString());
                     }
                     List<VariableDeclarator> variables = fieldDeclaration.getVariables();
                     for (VariableDeclarator v : variables) {
@@ -164,14 +166,14 @@ public class ClassAndPackageVisitor {
                         declaration.append(" ");
                         declaration.append(v.toString());
                         System.out.println("declaration: " + declaration);
-                        comment = fieldDeclaration.toString().replace(declaration.toString()+";", "");
+                        comment = fieldDeclaration.toString().replace(declaration.toString() + ";", "");
                         FieldModel fieldModel = new FieldModel();
                         fieldModel.setId(fieldId);
                         fieldModel.setField_type(valTypeName);
                         fieldModel.setField_name(d.getName());
                         fieldModel.setFull_declaration(declaration.toString());
                         fieldModel.setComment(comment);
-                        if(fieldId == 282){
+                        if (fieldId == 282) {
                             System.out.println(fieldId);
                         }
                         addFieldRelationModelList(classOrInterfaceName, fieldId.toString(), Field_In_Class);

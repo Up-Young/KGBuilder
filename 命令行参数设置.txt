@@ -1,0 +1,10 @@
+命令行参数说明：
+--version (-v): 输出版本号
+--help (-h): 输出帮助
+--multi-project (-mp): 是否为多个项目（是的话会对各子文件夹分开输出结果，默认不是）
+--output-dir xxx (-o): 设置输出目录为xxx（默认值output）
+--input-dir xxx (-i): 设置输入目录为xxx（默认值input）
+（暂不支持）--log (-l): 是否输出日志文件
+（暂不支持）--log-dir (-ld): 设置日志文件目录（默认值log）
+（暂不支持）--terminal (-t): 是否在控制台中输出中间信息（默认不输出）
+（暂不支持）--process-num xxx (-pn): 设置进程数为xxx（默认单进程）

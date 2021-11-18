@@ -17,28 +17,30 @@ import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.base.Joiner;
 import javafx.util.Pair;
 import model.TempMethod;
+
 import java.io.File;
 import java.util.*;
-import static util.Tools.*;
 
-public class MethodVisitor extends VoidVisitorAdapter<Object>{
-    public TempMethod parseMethod(MethodDeclaration n){
-        try{
+import static util.Tools.ImportPath;
+
+public class MethodVisitor extends VoidVisitorAdapter<Object> {
+    public TempMethod parseMethod(MethodDeclaration n) {
+        try {
             TempMethod tempMethod = new TempMethod();
             tempMethod.setModifierList(getAccessModifier(n));
             String belongClassName = getBelongClass(n);
             tempMethod.setBelongClass(belongClassName);
             String fullDeclaration = getFullDeclaration(n);
             String description = getDescription(n);
-            if(description == null){
+            if (description == null) {
                 description = "";
             }
             tempMethod.setDescription(description);
@@ -57,16 +59,16 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
             tempMethod.setThrowsCodeDirective(getThrowsCodeDirective(n));
             tempMethod.setReturnCodeDirective(getReturnCodeDirective(n));
             System.out.println("=========================");
-            System.out.println("Method name: "+ methodName);
-            System.out.println("Short name: "+ shortName);
-            System.out.println("Full declaration: "+ fullDeclaration);
-            System.out.println("Belong class name: "+ belongClassName);
-            System.out.println("Description: "+description);
-            System.out.println("Return Type: "+ returnType);
+            System.out.println("Method name: " + methodName);
+            System.out.println("Short name: " + shortName);
+            System.out.println("Full declaration: " + fullDeclaration);
+            System.out.println("Belong class name: " + belongClassName);
+            System.out.println("Description: " + description);
+            System.out.println("Return Type: " + returnType);
             System.out.println("=========================");
             return tempMethod;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -83,10 +85,10 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
         return description;
     }
 
-    public static List<String> getAccessModifier(MethodDeclaration m){
+    public static List<String> getAccessModifier(MethodDeclaration m) {
         NodeList<Modifier> nodeList = m.getModifiers();
         List<String> list = new ArrayList<String>();
-        for(Modifier node : nodeList){
+        for (Modifier node : nodeList) {
             list.add(node.toString().trim());
         }
         return list;
@@ -99,14 +101,14 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
         }
         int end = full_declaration.indexOf(")");
         int start = full_declaration.indexOf("(");
-        String parameter = full_declaration.substring(start+1, end+1);
+        String parameter = full_declaration.substring(start + 1, end + 1);
         String left = full_declaration.replace(parameter, "").replace("(", "");
-        String shortName = left.split(" ")[left.split(" ").length-1];
-        String [] paramList = parameter.split(",");
-        for(int i = 0; i < paramList.length;i++){
-            if(paramList[i].trim().split(" ").length>2){
+        String shortName = left.split(" ")[left.split(" ").length - 1];
+        String[] paramList = parameter.split(",");
+        for (int i = 0; i < paramList.length; i++) {
+            if (paramList[i].trim().split(" ").length > 2) {
                 paramList[i] = paramList[i].trim().split(" ")[1];
-            }else{
+            } else {
                 paramList[i] = paramList[i].trim().split(" ")[0];
             }
 
@@ -116,25 +118,24 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
         return result;
     }
 
-    private static String getShortName(MethodDeclaration m){
+    private static String getShortName(MethodDeclaration m) {
         String name = "";
         name = m.getName().asString();
         String full_declaration = m.getDeclarationAsString();
         int end = full_declaration.indexOf(")");
         int start = full_declaration.indexOf("(");
-        String right = full_declaration.substring(start, end+1);
+        String right = full_declaration.substring(start, end + 1);
         name += right;
         return name;
     }
 
-    private static String getQualifiedName(MethodDeclaration m){
+    private static String getQualifiedName(MethodDeclaration m) {
         //在某些情况下resolve会失败，暂不清楚什么情况下会触发bug。补救的getMethodName函数还有优化空间。
         String methodName = "";
-        try{
+        try {
             methodName = m.resolve().getQualifiedSignature();
             return methodName;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             ClassOrInterfaceDeclaration parentClass = (ClassOrInterfaceDeclaration) getAncestorNodeClassOrInterFaceDeclaration(m, 0);
             //String belongClassName = parentClass.resolve().getQualifiedName();
             String belongClassName = parentClass.getFullyQualifiedName().get();
@@ -144,24 +145,20 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
         }
     }
 
-    private static String getType(MethodDeclaration m){
+    private static String getType(MethodDeclaration m) {
         //问题很大 看看有没有更好的方法获取Type
         String typeReturn = "";
-        try{
-            if("T".equals(m.getType().asString())){
+        try {
+            if ("T".equals(m.getType().asString())) {
                 typeReturn = "T";
-            }
-            else{
-                if(m.getType().resolve().isPrimitive()) {
+            } else {
+                if (m.getType().resolve().isPrimitive()) {
                     typeReturn = m.getType().resolve().asPrimitive().getBoxTypeQName();
-                }
-                else if(m.getType().resolve().isArray()){
+                } else if (m.getType().resolve().isArray()) {
                     typeReturn = m.getType().resolve().describe();
-                }
-                else if(m.getType().isVoidType()){
+                } else if (m.getType().isVoidType()) {
                     typeReturn = "void";
-                }
-                else {
+                } else {
                     typeReturn = m.getType().resolve().asReferenceType().getQualifiedName();
                 }
             }
@@ -173,25 +170,23 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
     }
 
 
-
-    private static String getFullDeclaration(MethodDeclaration m){
+    private static String getFullDeclaration(MethodDeclaration m) {
         String full_declaration = "";
         full_declaration = m.getDeclarationAsString();
         return full_declaration;
     }
 
-    private static String getBelongClass(MethodDeclaration m){
+    private static String getBelongClass(MethodDeclaration m) {
         String belongClassName = "";
         try {
             ClassOrInterfaceDeclaration parentClass = (ClassOrInterfaceDeclaration) getAncestorNodeClassOrInterFaceDeclaration(m, 0);
-            if(parentClass != null) {
+            if (parentClass != null) {
                 belongClassName = parentClass.getFullyQualifiedName().get();
                 System.out.println("className: " + belongClassName);
             }
-            if (belongClassName != null){
+            if (belongClassName != null) {
                 return belongClassName;
-            }
-            else {
+            } else {
                 return "";
             }
         } catch (Exception e) {
@@ -236,7 +231,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
         return paramsTag;
     }
 
-    private static List<Pair<String, String>> getThrowTag(MethodDeclaration m){
+    private static List<Pair<String, String>> getThrowTag(MethodDeclaration m) {
         List<Pair<String, String>> throwTag = new ArrayList<>();
         Optional<Javadoc> javadocOptional = m.getJavadoc();
         if (javadocOptional.isPresent()) {
@@ -253,7 +248,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
         return throwTag;
     }
 
-    private static List<String> getParameter(MethodDeclaration m){
+    private static List<String> getParameter(MethodDeclaration m) {
         List<Parameter> parameterList = m.getParameters();
         List<String> pList = new LinkedList<>();
         for (Parameter p : parameterList) {
@@ -262,18 +257,18 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
         return pList;
     }
 
-    private static List<String> getParameterType(MethodDeclaration m){
+    private static List<String> getParameterType(MethodDeclaration m) {
         List<String> parameterTypeList = new ArrayList<>();
         String methodName = getQualifiedName(m);
         int me_end = methodName.indexOf(")");
         int me_start = methodName.indexOf("(");
-        String parameterString = methodName.substring(me_start+1,me_end);
+        String parameterString = methodName.substring(me_start + 1, me_end);
         String[] parameterListString = parameterString.split(",");
         parameterTypeList = Arrays.asList(parameterListString);
         return parameterTypeList;
     }
 
-    private static List<String> getException(MethodDeclaration m){
+    private static List<String> getException(MethodDeclaration m) {
         List<String> eList = new LinkedList<>();
         List<ReferenceType> thrownExceptions = m.getThrownExceptions();
         for (ReferenceType t : thrownExceptions) {
@@ -283,7 +278,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
         return eList;
     }
 
-    private static List<Pair<String, String>> getThrowsCodeDirective(MethodDeclaration m){
+    private static List<Pair<String, String>> getThrowsCodeDirective(MethodDeclaration m) {
         List<Pair<String, String>> throwsCodeDirective = new ArrayList<>();
         List<IfStmt> nodeList = m.findAll(IfStmt.class);
         for (IfStmt ifStmt : nodeList) {
@@ -306,7 +301,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
         return throwsCodeDirective;
     }
 
-    private static List<Pair<String, String>> getReturnCodeDirective(MethodDeclaration m){
+    private static List<Pair<String, String>> getReturnCodeDirective(MethodDeclaration m) {
         List<Pair<String, String>> returnCodeDirective = new ArrayList<>();
         List<IfStmt> nodeList = m.findAll(IfStmt.class);
         String returnType = m.getTypeAsString();
@@ -317,7 +312,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
                 if (!returnStmt.findAll(ReturnStmt.class).isEmpty()) {
                     //获取parameter名称列表
                     List<String> parameters = new ArrayList<>();
-                    for (Parameter node :m.getParameters()){
+                    for (Parameter node : m.getParameters()) {
                         parameters.add(node.getName().toString());
                     }
                     //获取condition名称列表
@@ -326,8 +321,8 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
                     //for (Node child: conditionChild){
                     //    conditionChildString.add(child.toString());
                     //}
-                    for (String parameter : parameters){
-                        if (condition.toString().contains(parameter)){
+                    for (String parameter : parameters) {
+                        if (condition.toString().contains(parameter)) {
                             Pair<String, String> pcd = new Pair<String, String>(returnType, condition.toString());
                             returnCodeDirective.add(pcd);
                             //添加到tmpMethod中
@@ -341,24 +336,24 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
         return returnCodeDirective;
     }
 
-    public static ClassOrInterfaceDeclaration getAncestorNodeClassOrInterFaceDeclaration(Node methodDeclaration, Integer recursionCount){
+    public static ClassOrInterfaceDeclaration getAncestorNodeClassOrInterFaceDeclaration(Node methodDeclaration, Integer recursionCount) {
         Optional<Node> parent = methodDeclaration.getParentNode();
-        if(parent.isPresent()) {
+        if (parent.isPresent()) {
             if (parent.get() instanceof ClassOrInterfaceDeclaration)
                 return (ClassOrInterfaceDeclaration) methodDeclaration.getParentNode().get();
             else {
                 if (recursionCount > 5) return null;
                 return getAncestorNodeClassOrInterFaceDeclaration(methodDeclaration.getParentNode().get(), recursionCount);
             }
-        }else {
+        } else {
             System.out.println("No parentNode, recursionCount: " + recursionCount);
             return null;
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         String FilePath = "D:\\Program\\APIComments\\javasrc\\src\\java\\awt\\Button.java";
-        try{
+        try {
             JavaParser javaParser = new JavaParser();
             TypeSolver reflectionTypeSolver = new ReflectionTypeSolver(false);
             TypeSolver javaParserTypeSolver_1 = new JavaParserTypeSolver(new File(ImportPath));
@@ -371,11 +366,10 @@ public class MethodVisitor extends VoidVisitorAdapter<Object>{
             ParseResult<CompilationUnit> result = javaParser.parse(new File(FilePath));
             CompilationUnit cu = result.getResult().get();
             List<MethodDeclaration> methodDeclarationList = cu.findAll(MethodDeclaration.class);
-            for (MethodDeclaration methodDeclaration : methodDeclarationList){
+            for (MethodDeclaration methodDeclaration : methodDeclarationList) {
                 new MethodVisitor().parseMethod(methodDeclaration);
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

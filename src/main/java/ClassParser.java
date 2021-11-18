@@ -9,18 +9,24 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import model.TempClass;
 import util.GetJavaFiles;
+import visitor.ClassVisitor;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
-import visitor.ClassVisitor;
+
 import static util.Tools.*;
 
 public class ClassParser {
     private static List<TempClass> classModelSet = new ArrayList<>();
     public static ClassVisitor classVisitor = new ClassVisitor();
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
+        parseClass();
+    }
+
+    public static void parseClass() {
         JavaParser javaParser = new JavaParser();
         TypeSolver reflectionTypeSolver = new ReflectionTypeSolver(false);
         TypeSolver javaParserTypeSolver_1 = new JavaParserTypeSolver(new File(ImportPath));
@@ -32,21 +38,21 @@ public class ClassParser {
         //使用CombinedTypeSolver替换ReflectionTypeSolver后可以解析出更多来自param和throws的type。
         File projectDir = new File(ImportPath);
         List<String> pathList = GetJavaFiles.listClasses(projectDir);
-        for(String path : pathList) {
+        for (String path : pathList) {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             FutureTask<Boolean> future =
                     new FutureTask<Boolean>(new Callable<Boolean>() {//使用Callable接口作为构造参数
                         @Override
                         public Boolean call() {
-                            try{
+                            try {
                                 ParseResult<CompilationUnit> result = javaParser.parse(new File(path));
                                 CompilationUnit cu = result.getResult().get();
                                 List<ClassOrInterfaceDeclaration> classOrInterfaceDeclarationList = cu.findAll(ClassOrInterfaceDeclaration.class);
-                                for (ClassOrInterfaceDeclaration classOrInterfaceDeclaration : classOrInterfaceDeclarationList){
+                                for (ClassOrInterfaceDeclaration classOrInterfaceDeclaration : classOrInterfaceDeclarationList) {
                                     TempClass tempClass = ClassVisitor.parseClass(classOrInterfaceDeclaration);
                                     classModelSet.add(tempClass);
                                 }
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             return true;

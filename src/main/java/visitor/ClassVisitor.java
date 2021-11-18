@@ -1,4 +1,5 @@
 package visitor;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
@@ -18,11 +19,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
-import static util.Tools.*;
+
+import static util.Tools.ImportPath;
 
 public class ClassVisitor extends VoidVisitorAdapter<Object> {
-    public static TempClass parseClass(ClassOrInterfaceDeclaration c){
-        try{
+    public static TempClass parseClass(ClassOrInterfaceDeclaration c) {
+        try {
             TempClass tempClass = new TempClass();
             String description = getDescription(c);
             tempClass.setDescription(description);
@@ -30,7 +32,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Object> {
             tempClass.setInherit(inheritInfo);
             boolean type = getType(c);
             tempClass.setType(type);
-            String name  = getName(c);
+            String name = getName(c);
             tempClass.setName(name);
             System.out.println("===================");
             System.out.println(name);
@@ -39,32 +41,32 @@ public class ClassVisitor extends VoidVisitorAdapter<Object> {
             System.out.println(description);
             System.out.println("===================");
             return tempClass;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public static String getDescription(ClassOrInterfaceDeclaration c){
+    public static String getDescription(ClassOrInterfaceDeclaration c) {
         String description = "";
         Optional<Javadoc> javadocOptional = c.getJavadoc();
-        if(javadocOptional.isPresent()){
+        if (javadocOptional.isPresent()) {
             Javadoc javadoc = javadocOptional.get();
             description = javadoc.getDescription().toText();
         }
         return description;
     }
 
-    public static Queue<String> getInheritInfo(ClassOrInterfaceDeclaration c){
+    public static Queue<String> getInheritInfo(ClassOrInterfaceDeclaration c) {
         Queue<String> inherit = new LinkedList<>();
         List<ClassOrInterfaceType> extendedTypeList = c.getExtendedTypes();
         List<ClassOrInterfaceType> implementedTypeList = c.getImplementedTypes();
 
         for (ClassOrInterfaceType extendedType : extendedTypeList) {
-            try{
+            try {
                 String extendName = extendedType.resolve().getQualifiedName();
                 inherit.add(extendName);
-            } catch (Throwable e){
+            } catch (Throwable e) {
                 String extendName = extendedType.getNameAsString();
                 inherit.add(extendName);
             }
@@ -74,7 +76,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Object> {
             try {
                 String implementedName = implementedType.resolve().getQualifiedName();
                 inherit.add(implementedName);
-            }catch (Exception e){
+            } catch (Exception e) {
                 String implementedName = implementedType.getNameAsString();
                 inherit.add(implementedName);
             }
@@ -82,20 +84,20 @@ public class ClassVisitor extends VoidVisitorAdapter<Object> {
         return inherit;
     }
 
-    public static boolean getType(ClassOrInterfaceDeclaration c){
+    public static boolean getType(ClassOrInterfaceDeclaration c) {
         return c.isInterface();
     }
 
-    public static String getName(ClassOrInterfaceDeclaration c){
+    public static String getName(ClassOrInterfaceDeclaration c) {
         String classOrInterfaceName = "";
         Optional<String> classOrInterfaceNameOptional = c.getFullyQualifiedName();
-        if(classOrInterfaceNameOptional.isPresent()) classOrInterfaceName = c.getFullyQualifiedName().get();
+        if (classOrInterfaceNameOptional.isPresent()) classOrInterfaceName = c.getFullyQualifiedName().get();
         return classOrInterfaceName;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         String FilePath = "D:\\Program\\APIComments\\javasrc\\src\\java\\awt\\Button.java";
-        try{
+        try {
             JavaParser javaParser = new JavaParser();
             TypeSolver reflectionTypeSolver = new ReflectionTypeSolver(false);
             TypeSolver javaParserTypeSolver_1 = new JavaParserTypeSolver(new File(ImportPath));
@@ -108,8 +110,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Object> {
             ParseResult<CompilationUnit> result = javaParser.parse(new File(FilePath));
             CompilationUnit cu = result.getResult().get();
             //new ClassVisitor().test(cu);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

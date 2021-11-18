@@ -24,4 +24,4 @@ project_root                           整个代码项目的根目录
 ```
 
 ## 解析程序运行
-使用maven pom.xml配置完项目依赖后运行ClassParser、MethodParser、RelationParser三个文件即可。没有顺序要求。运行后解析出来的数据会存放在parseResult目录下
+使用maven pom.xml配置完项目依赖后运行ClassParser、MethodParser、RelationParser三个文件即可。没有顺序要求。运行后解析出来的数据会存放在parseResult目录下.

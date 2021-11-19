@@ -10,5 +10,4 @@ data/*.json
 /data/relation.jl
 /data/doc.jl
 
-
-output/
+/output

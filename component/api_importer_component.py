@@ -12,7 +12,7 @@ from sekg.graph.exporter.graph_data import GraphData
 from sekg.ir.doc.wrapper import MultiFieldDocument
 from sekg.pipeline.component.api_importer.model import APIRelation, APIEntity
 from sekg.pipeline.component.base import Component
-from component.spacy_model import spacy_model
+# from component.spacy_model import spacy_model
 from component.html_extracter import HtmlExtractor
 """
 API知识图谱构建的主要功能实现类，通过创建api_importer_component类的实例可以将传入的JAVA源码解析结果构建成知识图谱。
@@ -84,7 +84,7 @@ class APIImporterComponent(Component):
         self.pro_name = pro_name
         self.code_element_kg_builder = CodeElementGraphDataBuilder(self.graph_data)
         self.language = language
-        self.nlp = spacy_model()
+        # self.nlp = spacy_model()
 
     def run(self, g_path, d_path):
         print("running component %r" % (self.type()))
@@ -782,8 +782,8 @@ class APIImporterComponent(Component):
                         doc = MultiFieldDocument(id=node_id, name=entity_row["name"])
                         doc.add_field("full_html_description", entity_row["description"])
                         doc.add_field("full_description", HtmlExtractor.html_remove(entity_row["description"]))
-                        sentence_list = self.sentence_cut(HtmlExtractor.html_remove(entity_row["description"]))
-                        doc.add_field("sentence_description", sentence_list)
+                        # sentence_list = self.sentence_cut(HtmlExtractor.html_remove(entity_row["description"]))
+                        # doc.add_field("sentence_description", sentence_list)
                         self.doc_collection.add_document(doc)
                         right_num += 1
             except:
@@ -820,11 +820,12 @@ class APIImporterComponent(Component):
         :param full_html_description:
         :return:
         """
+        # 迁移到 parser
         doc = MultiFieldDocument(id=node_id, name=entity_full_qualified_name)
         doc.add_field("full_html_description", full_html_description)
         doc.add_field("full_description", HtmlExtractor.html_remove(full_html_description))
-        sentence_list = self.sentence_cut(HtmlExtractor.html_remove(full_html_description))
-        doc.add_field("sentence_description", sentence_list)
+        # sentence_list = self.sentence_cut(HtmlExtractor.html_remove(full_html_description))
+        # doc.add_field("sentence_description", sentence_list)
         self.doc_collection.add_document(doc)
 
     def sentence_cut(self, doc_text):

@@ -2,7 +2,7 @@ import json
 import logging
 import os
 from git import Repo
-
+import git
 
 from py2neo import Graph
 from py2neo.cypher import Cursor
@@ -82,4 +82,3 @@ if __name__ == "__main__":
             path_with_name = os.path.join(OUTPUT_DIR, 'repository', i['project name'])
             print(path_with_name)
             Repo.clone_from(url, path_with_name)
-

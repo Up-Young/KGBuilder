@@ -82,3 +82,4 @@ if __name__ == "__main__":
             path_with_name = os.path.join(OUTPUT_DIR, 'repository', i['project name'])
             print(path_with_name)
             Repo.clone_from(url, path_with_name)
+

@@ -9,3 +9,5 @@ data/*.json
 /data/node.jl
 /data/relation.jl
 /data/doc.jl
+
+/output

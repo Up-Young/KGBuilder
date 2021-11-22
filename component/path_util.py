@@ -1,13 +1,8 @@
 from pathlib import Path
-from definitions import DATA_DIR, OUTPUT_DIR
+from definitions import  OUTPUT_DIR
 
 
 class PathUtil:
-    @staticmethod
-    def json_path():
-        json_input_dir = Path(DATA_DIR)
-        json_input_dir.mkdir(exist_ok=True, parents=True)
-        return str(json_input_dir)
 
     @staticmethod
     def graph_data(pro_name, version):

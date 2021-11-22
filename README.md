@@ -39,7 +39,7 @@ project_root                           整个代码项目的根目录
   >>> pip install data/en_core_web_sm-3.0.0.tar.gz
 ```
 
-3. 将解析好的java源码数据放入data目录下后运行 
+3. 整体流水线 
 ```
-  >>> python main.py
+  >>> python run_pipeline.py
 ```

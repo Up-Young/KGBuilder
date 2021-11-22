@@ -1,8 +1,8 @@
 import os
 
-from component.api_importer_component import APIImporterComponent
+from graph_build_component.api_importer_component import APIImporterComponent
 from sekg.graph.exporter.graph_data import GraphData
-from component.path_util import PathUtil
+from graph_build_component.path_util import PathUtil
 from definitions import JAVA_REPOSITORIES_DIR, REPOSITORIES_PARSER_DIR
 
 

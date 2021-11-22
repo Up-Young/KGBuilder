@@ -4,7 +4,7 @@ import json
 
 
 import tqdm
-from component.ConstantCodeEntity import CodeEntityCategory, CodeEntityRelationCategory
+from graph_build_component.ConstantCodeEntity import CodeEntityCategory, CodeEntityRelationCategory
 from sekg.constant.constant import CodeConstant
 from sekg.graph.builder.code_kg_builder import CodeElementGraphDataBuilder
 from sekg.graph.creator import NodeBuilder
@@ -13,7 +13,7 @@ from sekg.ir.doc.wrapper import MultiFieldDocument
 from sekg.pipeline.component.api_importer.model import APIRelation, APIEntity
 from sekg.pipeline.component.base import Component
 # from component.spacy_model import spacy_model
-from component.html_extracter import HtmlExtractor
+from graph_build_component.html_extracter import HtmlExtractor
 """
 API知识图谱构建的主要功能实现类，通过创建api_importer_component类的实例可以将传入的JAVA源码解析结果构建成知识图谱。
 """

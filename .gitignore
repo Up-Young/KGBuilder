@@ -6,8 +6,9 @@
 /venv
 data/*.json
 *.pyc
-/data/node.jl
-/data/relation.jl
-/data/doc.jl
+
+data/project
+data/repository
+data/parseResult
+
 output/
-data/

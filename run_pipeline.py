@@ -102,7 +102,7 @@ if __name__ == "__main__":
     kg_builder.get_libraries_info()
     #
     # 指定从json文件中提取的语言类型(首字母要大写) 和提取数量，克隆仓库
-    kg_builder.get_clone_repository('Java', 2)
+    kg_builder.get_clone_repository('Java', 5)
 
     # 对克隆下来的仓库源码进行分析，生成json文件
     kg_builder.repositoriy_parser()

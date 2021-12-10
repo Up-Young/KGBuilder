@@ -1,27 +1,45 @@
-# APISrcParser
+# KGBuilder
 ## 项目结构
+结构说明
 ```
 project_root                           整个代码项目的根目录
 │   README.md                          对于整个项目的介绍
 │   .gitignore                         对于某些文件和目录让Git忽略管理
-│   pom.xml                            maven项目的管理文件
-│  
+│   requirements.txt                   声明整个项目依赖的Python库
+│   definitions.py                     定义一个ROOT_DIR的常量作为项目根目录。
+│ 
+│   main.py                            建图功能的主入口
 │                      
-└───srcCode                            存放需要被解析的java源码
+└───data                               存放java源码解析后的json文件
 │
-└───parseResult                        存放解析出来后的json数据文件
+└───output                             存放构建完成的.graph文件和.dc文件
 │
-└───src                                解析程序的核心代码目录
+└───component                          建图程序的核心代码目录
 │   │                   
-│   └───main
-│       └───java
-│           └───model                  解析java代码时定义的基础数据结构，如classModel、EntityModel等
-│           └───util                   解析java代码时用到的工具类
-│           └───visitor                解析java代码的核心组件，传入对应的javaparser解析结果cu，解析出对应的class、method信息
-│           └───ClassParser            解析java代码中的class信息的入口
-│           └───MethodParser           解析java代码中的method信息的入口
-│           └───RelationParser         解析java代码中的class和package以及class和field等entity之间的关系的入口
+│   └───api_importer_component.py      建图程序的核心组件，功能是从JSON文件中将API信息导入到图中。
+│   └───ConstantCodeEntity.py          定义了一些API类型、API关系的常量
+│   └───html_extracter.py              工具类，用于处理API文档中的html标签
+│   └───path_util.py                   工具类，路径工具类，里面的路径都是相对与项目根目录的路径
+│   └───spacy_fixer.py                 spacy相关的工具类
+│   └───spacy_model.py                 spacy相关的工具类
+│   └───sentenceHandler.py             spacy相关的工具类
+│
+
 ```
 
-## 解析程序运行
-使用maven pom.xml配置完项目依赖后运行ClassParser、MethodParser、RelationParser三个文件即可。没有顺序要求。运行后解析出来的数据会存放在parseResult目录下.
+## 建图程序运行
+
+1. 安装依赖
+```
+  >>> pip install -r requirements.txt
+```
+
+2. 安装spacy语言模型，由于网络问题，spacy官方的模型经常下载不下来，故直接将模型文件上传到项目中
+```
+  >>> pip install data/en_core_web_sm-3.0.0.tar.gz
+```
+
+3. 整体流水线 
+```
+  >>> python run_pipeline.py
+```

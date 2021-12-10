@@ -1,0 +1,32 @@
+{
+  "name": "excel2canvas",
+  "version": "1.2.3",
+  "authors": [
+    "Shunji Konishi"
+  ],
+  "description": "Draw excel in html5 canvas",
+  "main": "jquery.excel2canvas.js",
+  "moduleType": [
+    "es6"
+  ],
+  "keywords": [
+    "excel",
+    "jquery"
+  ],
+  "license": "MIT",
+  "homepage": "http://oss.flect.co.jp/libs/excel2canvas.html",
+  "dependencies": {
+    "jquery": "^1.11.1",
+    "flotr2": "https://github.com/HumbleSoftware/Flotr2.git"
+  },
+  "ignore": [
+    "**/.*",
+    "**/*.jar",
+    "src",
+    "testdata",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

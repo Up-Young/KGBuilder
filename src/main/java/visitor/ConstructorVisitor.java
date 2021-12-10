@@ -9,8 +9,9 @@ import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.google.common.base.Joiner;
-import javafx.util.Pair;
+//import javafx.util.Pair;
 import model.TempMethod;
+import util.Pair;
 
 import java.util.*;
 

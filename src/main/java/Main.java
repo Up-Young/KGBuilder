@@ -35,10 +35,10 @@ public class Main {
             multiProject = true;
         if (commandLine.hasOption("l"))
             log = true;
-        if (commandLine.hasOption("o"))
-            Tools.ImportPath = commandLine.getOptionValue("o");
         if (commandLine.hasOption("i"))
-            Tools.OutputPath = commandLine.getOptionValue("i");
+            Tools.ImportPath = commandLine.getOptionValue("i");
+        if (commandLine.hasOption("o"))
+            Tools.OutputPath = commandLine.getOptionValue("o");
         if (commandLine.hasOption("pn"))
             processNum = Integer.parseInt(commandLine.getOptionValue("pn"));
 
@@ -53,7 +53,7 @@ public class Main {
         System.out.println("命令行参数说明：\n" +
                 "--version (-v): 输出版本号\n" +
                 "--help (-h): 输出帮助\n" +
-                "--multi-roject (-mp): 是否为多个项目（是的话会对各子文件夹分开输出结果，默认不是）\n" +
+                "--multi-project (-mp): 是否为多个项目（是的话会对各子文件夹分开输出结果，默认不是）\n" +
                 "--output-dir xxx (-o): 设置输出目录为xxx（默认值output）\n" +
                 "--input-dir xxx (-i): 设置输入目录为xxx（默认值input）\n" +
                 "--log (-l): 是否输出日志文件\n" +

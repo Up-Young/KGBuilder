@@ -23,8 +23,9 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.base.Joiner;
-import javafx.util.Pair;
+//import javafx.util.Pair;
 import model.TempMethod;
+import util.Pair;
 
 import java.io.File;
 import java.util.*;

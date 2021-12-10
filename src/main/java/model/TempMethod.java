@@ -1,6 +1,8 @@
 package model;
 
-import javafx.util.Pair;
+//import javafx.util.Pair;
+
+import util.Pair;
 
 import java.util.List;
 

@@ -3,4 +3,5 @@
 /target
 /output/parseResult
 /input/repository
+/input/*
 APISrcParser.iml

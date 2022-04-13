@@ -27,6 +27,7 @@ public class ClassParser {
     }
 
     public static void parseClass() {
+//        使用默认的java8来解析
         JavaParser javaParser = new JavaParser();
         TypeSolver reflectionTypeSolver = new ReflectionTypeSolver(false);
         TypeSolver javaParserTypeSolver_1 = new JavaParserTypeSolver(new File(ImportPath));
@@ -36,7 +37,9 @@ public class ClassParser {
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(combinedSolver);
         javaParser.getParserConfiguration().setSymbolResolver(symbolSolver);
         //使用CombinedTypeSolver替换ReflectionTypeSolver后可以解析出更多来自param和throws的type。
+        //设置文件根目录
         File projectDir = new File(ImportPath);
+        //获取java文件list
         List<String> pathList = GetJavaFiles.listClasses(projectDir);
         for (String path : pathList) {
             ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -47,6 +50,7 @@ public class ClassParser {
                             try {
                                 ParseResult<CompilationUnit> result = javaParser.parse(new File(path));
                                 CompilationUnit cu = result.getResult().get();
+                                // 从解析结果中获取类/接口类
                                 List<ClassOrInterfaceDeclaration> classOrInterfaceDeclarationList = cu.findAll(ClassOrInterfaceDeclaration.class);
                                 for (ClassOrInterfaceDeclaration classOrInterfaceDeclaration : classOrInterfaceDeclarationList) {
                                     TempClass tempClass = ClassVisitor.parseClass(classOrInterfaceDeclaration);

@@ -26,7 +26,7 @@ public class Tools {
     public static final Integer RELATION_CATEGORY_METHOD_IMPLEMENT_CODE_CALL_CLASS = 14;
     public static final Integer Field_In_Class = 14;
 
-    public static String ImportPath = Paths.get("output", "repository", "Java").toString();
+    public static String ImportPath = Paths.get("input", "repository", "Java").toString();
     public static String OutputPath = Paths.get("output", "parseResult").toString();
 
     public static void writeModelListToJson(Path file_path_and_name, Collection<?> entityModelList) {

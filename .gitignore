@@ -1,5 +1,6 @@
 /.idea
 /.git
 /target
-/parseResult
+/output/parseResult
+/input/repository
 APISrcParser.iml

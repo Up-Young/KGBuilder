@@ -58,6 +58,7 @@ public class RelationParser {
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
                 future.cancel(true);
             } finally {
+//
                 executor.shutdown();
             }
         }
@@ -74,6 +75,7 @@ public class RelationParser {
         visitor.fieldModelArrayList.clear();
         writeToJson(OutputPath, visitor.fieldRelationModelList, "FieldsAndClassRelations.json");
         visitor.fieldRelationModelList.clear();
+        visitor.cleanAll();
         System.out.println("------finish-----------");
     }
 }

@@ -1,7 +1,9 @@
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -56,6 +58,13 @@ public class ClassParser {
                                     TempClass tempClass = ClassVisitor.parseClass(classOrInterfaceDeclaration);
                                     classModelSet.add(tempClass);
                                 }
+                                // 添加对枚举类型的解析
+                                List<EnumDeclaration> enumDeclarationList = cu.findAll(EnumDeclaration.class);
+                                for (EnumDeclaration enumDeclaration : enumDeclarationList) {
+                                    TempClass tempClass = ClassVisitor.parseClass(enumDeclaration);
+                                    classModelSet.add(tempClass);
+                                }
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -72,5 +81,7 @@ public class ClassParser {
             }
         }
         writeToJson(OutputPath, classModelSet, "ClassAll.json");
+        classModelSet.clear();
+
     }
 }

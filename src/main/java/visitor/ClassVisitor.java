@@ -4,6 +4,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.javadoc.Javadoc;
@@ -46,8 +47,40 @@ public class ClassVisitor extends VoidVisitorAdapter<Object> {
             return null;
         }
     }
+    public static TempClass parseClass(EnumDeclaration c) {
+        try {
+            TempClass tempClass = new TempClass();
+            String description = getDescription(c);
+            tempClass.setDescription(description);
+            Queue<String> inheritInfo = new LinkedList<>();
+            tempClass.setInherit(inheritInfo);
+            boolean type = false;
+            tempClass.setType(type);
+            String name = getName(c);
+            tempClass.setName(name);
+            System.out.println("===================");
+            System.out.println(name);
+            System.out.println(type);
+            System.out.println(inheritInfo);
+            System.out.println(description);
+            System.out.println("===================");
+            return tempClass;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public static String getDescription(ClassOrInterfaceDeclaration c) {
+        String description = "";
+        Optional<Javadoc> javadocOptional = c.getJavadoc();
+        if (javadocOptional.isPresent()) {
+            Javadoc javadoc = javadocOptional.get();
+            description = javadoc.getDescription().toText();
+        }
+        return description;
+    }
+    public static String getDescription(EnumDeclaration c) {
         String description = "";
         Optional<Javadoc> javadocOptional = c.getJavadoc();
         if (javadocOptional.isPresent()) {
@@ -89,6 +122,12 @@ public class ClassVisitor extends VoidVisitorAdapter<Object> {
     }
 
     public static String getName(ClassOrInterfaceDeclaration c) {
+        String classOrInterfaceName = "";
+        Optional<String> classOrInterfaceNameOptional = c.getFullyQualifiedName();
+        if (classOrInterfaceNameOptional.isPresent()) classOrInterfaceName = c.getFullyQualifiedName().get();
+        return classOrInterfaceName;
+    }
+    public static String getName(EnumDeclaration c) {
         String classOrInterfaceName = "";
         Optional<String> classOrInterfaceNameOptional = c.getFullyQualifiedName();
         if (classOrInterfaceNameOptional.isPresent()) classOrInterfaceName = c.getFullyQualifiedName().get();

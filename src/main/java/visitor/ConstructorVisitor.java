@@ -83,12 +83,12 @@ public class ConstructorVisitor {
         if (belongClassName.equals("")) {
             return "";
         }
-        int end = full_declaration.indexOf(")");
+        int end = full_declaration.lastIndexOf(")");
         int start = full_declaration.indexOf("(");
         String parameter = full_declaration.substring(start + 1, end + 1);
         String left = full_declaration.replace(parameter, "").replace("(", "");
         String shortName = left.split(" ")[left.split(" ").length - 1];
-        String[] paramList = parameter.split(",");
+        String[] paramList = parameter.split(",(?=(((?!\\>).)*\\<)|[^\\<\\>]*$)");
         for (int i = 0; i < paramList.length; i++) {
             if (paramList[i].trim().split(" ").length > 2) {
                 paramList[i] = paramList[i].trim().split(" ")[1];
@@ -106,7 +106,7 @@ public class ConstructorVisitor {
         String name = "";
         name = c.getName().asString();
         String full_declaration = c.getDeclarationAsString();
-        int end = full_declaration.indexOf(")");
+        int end = full_declaration.lastIndexOf(")");
         int start = full_declaration.indexOf("(");
         String right = full_declaration.substring(start, end + 1);
         name += right;
@@ -212,10 +212,16 @@ public class ConstructorVisitor {
     private static List<String> getParameterType(ConstructorDeclaration c) {
         List<String> parameterTypeList = new ArrayList<>();
         String methodName = getQualifiedName(c);
-        int me_end = methodName.indexOf(")");
+//      修复方法名为me.cmoz.diver.JavaServer.registeredProcName) (OtpNode, HBaseClient, @Named ("erlang.registered_proc_name"))的情况
+        int me_end = methodName.lastIndexOf(")");
         int me_start = methodName.indexOf("(");
+
         String parameterString = methodName.substring(me_start + 1, me_end);
-        String[] parameterListString = parameterString.split(",");
+//        修复参数map<T,T>,T的情况
+        String[] parameterListString = parameterString.split(",(?=(((?!\\>).)*\\<)|[^\\<\\>]*$)");
+        for (int i = 0; i < parameterListString.length; i++) {
+            parameterListString[i] = parameterListString[i].trim();
+        }
         parameterTypeList = Arrays.asList(parameterListString);
         return parameterTypeList;
     }

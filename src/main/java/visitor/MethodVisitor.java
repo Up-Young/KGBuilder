@@ -9,14 +9,19 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -100,12 +105,12 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
         if (belongClassName.equals("")) {
             return "";
         }
-        int end = full_declaration.indexOf(")");
+        int end = full_declaration.lastIndexOf(")");
         int start = full_declaration.indexOf("(");
         String parameter = full_declaration.substring(start + 1, end + 1);
         String left = full_declaration.replace(parameter, "").replace("(", "");
         String shortName = left.split(" ")[left.split(" ").length - 1];
-        String[] paramList = parameter.split(",");
+        String[] paramList = parameter.split(",(?=(((?!\\>).)*\\<)|[^\\<\\>]*$)");
         for (int i = 0; i < paramList.length; i++) {
             if (paramList[i].trim().split(" ").length > 2) {
                 paramList[i] = paramList[i].trim().split(" ")[1];
@@ -123,7 +128,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
         String name = "";
         name = m.getName().asString();
         String full_declaration = m.getDeclarationAsString();
-        int end = full_declaration.indexOf(")");
+        int end = full_declaration.lastIndexOf(")");
         int start = full_declaration.indexOf("(");
         String right = full_declaration.substring(start, end + 1);
         name += right;
@@ -261,19 +266,60 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
     private static List<String> getParameterType(MethodDeclaration m) {
         List<String> parameterTypeList = new ArrayList<>();
         String methodName = getQualifiedName(m);
-        int me_end = methodName.indexOf(")");
+        int me_end = methodName.lastIndexOf(")");
         int me_start = methodName.indexOf("(");
         String parameterString = methodName.substring(me_start + 1, me_end);
-        String[] parameterListString = parameterString.split(",");
+        String[] parameterListString = parameterString.split(",(?=(((?!\\>).)*\\<)|[^\\<\\>]*$)");
+        for (int i = 0; i < parameterListString.length; i++) {
+            parameterListString[i] = parameterListString[i].trim();
+        }
         parameterTypeList = Arrays.asList(parameterListString);
         return parameterTypeList;
     }
+
+    private static String getFullName(TypeDeclaration astType) {
+        if( astType.isTopLevelType() ){
+            if( astType.findCompilationUnit().get().getPackageDeclaration().isPresent()) {
+                String pkgName = astType.findCompilationUnit().get().getPackageDeclaration().get().getNameAsString();
+                return pkgName +"."+ astType.getNameAsString();
+            }
+            return astType.getNameAsString(); //top level TYPE but no package declaration
+        }
+        if(!astType.getParentNode().isPresent()){
+            return astType.getNameAsString();
+        }
+        //prefix back to parents
+        String name = astType.getNameAsString();
+        Node n = astType.getParentNode().get();
+        if( n instanceof TypeDeclaration){
+            return getFullName( (TypeDeclaration)n)+"."+name;
+        }
+        if( n instanceof LocalClassDeclarationStmt ){
+            LocalClassDeclarationStmt lc = (LocalClassDeclarationStmt) n;
+            return lc.getClassDeclaration().getNameAsString();
+        } else {
+            NodeWithName nwn = (NodeWithName) n;
+            name = nwn.getNameAsString() + "." + name;
+            if (n.getParentNode().isPresent()) {
+                return getFullName((TypeDeclaration) n) + "." + name;
+            }
+        }
+        return name;
+
+    }
+
 
     private static List<String> getException(MethodDeclaration m) {
         List<String> eList = new LinkedList<>();
         List<ReferenceType> thrownExceptions = m.getThrownExceptions();
         for (ReferenceType t : thrownExceptions) {
-            String exception = t.resolve().asReferenceType().getQualifiedName();
+            String exception = "";
+            try{
+                exception = t.resolve().asReferenceType().getQualifiedName();
+//                修复bug
+            } catch (UnsolvedSymbolException e) {
+                exception = t.toString();
+            }
             eList.add(exception);
         }
         return eList;

@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.javadoc.Javadoc;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.google.common.base.Strings;
@@ -44,6 +45,7 @@ public class ClassAndPackageVisitor {
         recordName.add(classOrInterfaceName);
 
         ClassModel classyModel = new ClassModel();
+
 //        classOrInterfaceName = classOrInterfaceName.replace(" ", "");
         classyModel.setQualified_name(classOrInterfaceName);
         classyModel.setName(name);
@@ -111,23 +113,31 @@ public class ClassAndPackageVisitor {
                 if (!packageName.equals("")) addRelationModelList(classOrInterfaceName, packageName, BELONGTO);
                 List<ClassOrInterfaceType> extendedTypeList = classOrInterfaceDeclaration.getExtendedTypes();
                 for (ClassOrInterfaceType extendedType : extendedTypeList) {
+                    String extendName = "";
                     try {
-                        String extendName = extendedType.resolve().getQualifiedName();
-                        System.out.println("extend " + extendName);
-                        addRelationModelList(classOrInterfaceName, extendName, EXTEND);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        extendName = extendedType.resolve().getQualifiedName();
+                    } catch (UnsolvedSymbolException e) {
+                        System.err.println("UnsolvedSymbolException");
+                        extendName = extendedType.toString();
+//                        e.printStackTrace();
                     }
+                    System.out.println("extend " + extendName);
+                    addRelationModelList(classOrInterfaceName, extendName, EXTEND);
                 }
                 List<ClassOrInterfaceType> implementedTypeList = classOrInterfaceDeclaration.getImplementedTypes();
                 for (ClassOrInterfaceType implementedType : implementedTypeList) {
+                    String interfaceName ="";
                     try {
-                        String interfaceName = implementedType.resolve().getQualifiedName();
-                        addRelationModelList(classOrInterfaceName, interfaceName, IMPLEMENT);
-                        System.out.println("implemented " + interfaceName);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        interfaceName = implementedType.resolve().getQualifiedName();
+                        //                    修复UnsolvedSymbolException异常
+                    } catch (UnsolvedSymbolException e) {
+//                        e.printStackTrace();
+                        System.err.println("UnsolvedSymbolException");
+                        interfaceName=implementedType.toString();
                     }
+                    System.out.println("implemented " + interfaceName);
+                    addRelationModelList(classOrInterfaceName, interfaceName, IMPLEMENT);
+
                 }
                 Optional<Javadoc> javadocOptional = classOrInterfaceDeclaration.getJavadoc();
                 if (javadocOptional.isPresent()) {
@@ -221,10 +231,11 @@ public class ClassAndPackageVisitor {
     }
 
 
-    private void cleanAll() {
+    public void cleanAll() {
         System.out.println("start clean");
-        relationModelList.clear();
         entityModelSet.clear();
+        classModelSet.clear();
+        relationModelList.clear();
         recordName.clear();
         fieldModelArrayList.clear();
         fieldRelationModelList.clear();

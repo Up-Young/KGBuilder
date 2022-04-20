@@ -79,5 +79,6 @@ public class MethodParser {
             }
         }
         writeToJson(OutputPath, methodModelSet, "MethodAll.json");
+        methodModelSet.clear();
     }
 }

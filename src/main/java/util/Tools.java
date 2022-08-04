@@ -1,12 +1,19 @@
 package util;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class Tools {
     public static final Integer PACKAGE_ENTITY = 1;
@@ -29,23 +36,49 @@ public class Tools {
     public static String ImportPath = Paths.get("input", "repository", "Java").toString();
     public static String OutputPath = Paths.get("output", "parseResult").toString();
 
-    public static void writeModelListToJson(Path file_path_and_name, Collection<?> entityModelList) {
-        try {
-            if (!(entityModelList.size() > 0)) {
-                return;
-            }
-            System.out.println(file_path_and_name);
+    public static void writeModelListToJson(Path file_path_and_name, List<?> entityModelList) {
+        int len = entityModelList.size();
+        if ((len <= 0)) {
+            return;
+        }
+        System.out.println(file_path_and_name);
+        //oom
+//            Files.write(file_path_and_name, JSON.toJSONString(entityModelList).getBytes());
 
-            Files.write(file_path_and_name, JSON.toJSONString(entityModelList).getBytes());
+//            oom
+//            PrintWriter out = new PrintWriter(new FileWriter(String.valueOf(file_path_and_name)));
+//            String json = new Gson().toJson((entityModelList));
+//            out.write(json);
+
+//            Files.write(file_path_and_name, json.getBytes());
+
+        try {
+            Files.write(file_path_and_name, Collections.singleton((new Gson().toJson((entityModelList)))));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+//            Gson gson = new Gson();
+//            gson.toJson(Collections.singleton((new Gson().toJson((entityModelList), new FileWriter(String.valueOf(file_path_and_name)));
+//                        System.out.println(file_util.Tools.writeToJsonpath_and_name);
+//            for (Object o : entityModelList) {
+//                Files.write(file_path_and_name, JSON.toJSONString(o).getBytes(), StandardOpenOption.APPEND);
+//            }
+
     }
 
-    public static void writeToJson(String FilePath, Collection<?> entityModelList, String filename) {
-        System.out.println("-------start write--------");
+
+    public static void writeToJson(String FilePath, List<?> entityModelList, String filename) {
+//        System.out.println("-------start write--------");
         Path file_path_with_name = Paths.get(FilePath, filename);
+//        if(!Files.exists(file_path_with_name)){
+//            try {
+//                Files.createFile(file_path_with_name);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
         writeModelListToJson(file_path_with_name, entityModelList);
-        System.out.println("-------finish write--------");
+//        System.out.println("-------finish write--------");
     }
 }

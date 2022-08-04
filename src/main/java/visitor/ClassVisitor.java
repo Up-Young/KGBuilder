@@ -35,12 +35,12 @@ public class ClassVisitor extends VoidVisitorAdapter<Object> {
             tempClass.setType(type);
             String name = getName(c);
             tempClass.setName(name);
-            System.out.println("===================");
-            System.out.println(name);
-            System.out.println(type);
-            System.out.println(inheritInfo);
-            System.out.println(description);
-            System.out.println("===================");
+//            System.out.println("===================");
+//            System.out.println(name);
+//            System.out.println(type);
+//            System.out.println(inheritInfo);
+//            System.out.println(description);
+//            System.out.println("===================");
             return tempClass;
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,12 +58,12 @@ public class ClassVisitor extends VoidVisitorAdapter<Object> {
             tempClass.setType(type);
             String name = getName(c);
             tempClass.setName(name);
-            System.out.println("===================");
-            System.out.println(name);
-            System.out.println(type);
-            System.out.println(inheritInfo);
-            System.out.println(description);
-            System.out.println("===================");
+//            System.out.println("===================");
+//            System.out.println(name);
+//            System.out.println(type);
+//            System.out.println(inheritInfo);
+//            System.out.println(description);
+//            System.out.println("===================");
             return tempClass;
         } catch (Exception e) {
             e.printStackTrace();

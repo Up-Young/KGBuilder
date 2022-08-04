@@ -29,25 +29,33 @@ public class Main {
         boolean log = false;
         int processNum = 1;
 
-        if (commandLine.hasOption("v"))
+        if (commandLine.hasOption("v")) {
             printVersion();
-        if (commandLine.hasOption("h"))
+        }
+        if (commandLine.hasOption("h")) {
             printHelp();
-        if (commandLine.hasOption("mp"))
+        }
+        if (commandLine.hasOption("mp")) {
             multiProject = true;
-        if (commandLine.hasOption("l"))
+        }
+        if (commandLine.hasOption("l")) {
             log = true;
-        if (commandLine.hasOption("i"))
+        }
+        if (commandLine.hasOption("i")) {
             Tools.ImportPath = commandLine.getOptionValue("i");
-        if (commandLine.hasOption("o"))
+        }
+        if (commandLine.hasOption("o")) {
             Tools.OutputPath = commandLine.getOptionValue("o");
-        if (commandLine.hasOption("pn"))
+        }
+        if (commandLine.hasOption("pn")) {
             processNum = Integer.parseInt(commandLine.getOptionValue("pn"));
+        }
 
-        if (multiProject)
+        if (multiProject) {
             parseMultipleProjects();
-        else
+        } else {
             parseSingleProject();
+        }
 
     }
 
@@ -81,8 +89,11 @@ public class Main {
         for (File child : Objects.requireNonNull(file.listFiles())) {
             Tools.ImportPath = in + "/" + child.getName();
             Tools.OutputPath = out + "/" + child.getName();
+            System.out.println(child);
             File outDir = new File(Tools.OutputPath);
-            if (!outDir.exists()) outDir.mkdir();
+            if (!outDir.exists()) {
+                outDir.mkdir();
+            }
             parseSingleProject();
         }
     }

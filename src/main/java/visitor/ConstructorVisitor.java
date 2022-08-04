@@ -37,14 +37,14 @@ public class ConstructorVisitor {
             tempMethod.setThrowException(getException(c));
             String returnType = getConstructorType(c);
             tempMethod.setReturnValueType(returnType);
-            System.out.println("=========================");
-            System.out.println("Method name: " + methodName);
-            System.out.println("Short name: " + shortName);
-            System.out.println("Full declaration: " + fullDeclaration);
-            System.out.println("Belong class name: " + belongClassName);
-            System.out.println("Description: " + description);
-            System.out.println("Return Type: " + returnType);
-            System.out.println("=========================");
+//            System.out.println("=========================");
+//            System.out.println("Method name: " + methodName);
+//            System.out.println("Short name: " + shortName);
+//            System.out.println("Full declaration: " + fullDeclaration);
+//            System.out.println("Belong class name: " + belongClassName);
+//            System.out.println("Description: " + description);
+//            System.out.println("Return Type: " + returnType);
+//            System.out.println("=========================");
             return tempMethod;
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,7 +141,7 @@ public class ConstructorVisitor {
             ClassOrInterfaceDeclaration parentClass = (ClassOrInterfaceDeclaration) getAncestorNodeClassOrInterFaceDeclaration(c, 0);
             if (parentClass != null) {
                 belongClassName = parentClass.getFullyQualifiedName().get();
-                System.out.println("className: " + belongClassName);
+//                System.out.println("className: " + belongClassName);
             }
             return belongClassName;
         } catch (Exception e) {
@@ -247,7 +247,7 @@ public class ConstructorVisitor {
                 return getAncestorNodeClassOrInterFaceDeclaration(methodDeclaration.getParentNode().get(), recursionCount);
             }
         } else {
-            System.out.println("No parentNode, recursionCount: " + recursionCount);
+//            System.out.println("No parentNode, recursionCount: " + recursionCount);
             return null;
         }
     }

@@ -64,14 +64,14 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
             tempMethod.setReturnValueType(returnType);
             tempMethod.setThrowsCodeDirective(getThrowsCodeDirective(n));
             tempMethod.setReturnCodeDirective(getReturnCodeDirective(n));
-            System.out.println("=========================");
-            System.out.println("Method name: " + methodName);
-            System.out.println("Short name: " + shortName);
-            System.out.println("Full declaration: " + fullDeclaration);
-            System.out.println("Belong class name: " + belongClassName);
-            System.out.println("Description: " + description);
-            System.out.println("Return Type: " + returnType);
-            System.out.println("=========================");
+//            System.out.println("=========================");
+//            System.out.println("Method name: " + methodName);
+//            System.out.println("Short name: " + shortName);
+//            System.out.println("Full declaration: " + fullDeclaration);
+//            System.out.println("Belong class name: " + belongClassName);
+//            System.out.println("Description: " + description);
+//            System.out.println("Return Type: " + returnType);
+//            System.out.println("=========================");
             return tempMethod;
 
         } catch (Exception e) {
@@ -100,7 +100,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
         return list;
     }
 
-    public static String getMethodName(String belongClassName, String full_declaration) {
+    public static String getMethodName(String belongClassName, String full_declaration,String simpleName) {
         String result = "";
         if (belongClassName.equals("")) {
             return "";
@@ -109,18 +109,20 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
         int start = full_declaration.indexOf("(");
         String parameter = full_declaration.substring(start + 1, end + 1);
         String left = full_declaration.replace(parameter, "").replace("(", "");
-        String shortName = left.split(" ")[left.split(" ").length - 1];
+//        String shortName = left.split(" ")[left.split(" ").length - 1];
         String[] paramList = parameter.split(",(?=(((?!\\>).)*\\<)|[^\\<\\>]*$)");
         for (int i = 0; i < paramList.length; i++) {
             if (paramList[i].trim().split(" ").length > 2) {
-                paramList[i] = paramList[i].trim().split(" ")[1];
+//                paramList[i] = paramList[i].trim().split(" ")[1];
+//                //修复获取名称bug："'Map<String, Double> scoreMembers"->"com.gitee.fufu669.service.CacheService.zadd(String, Double>, ZAddParams)"
+                paramList[i] = paramList[i].trim().substring(0,paramList[i].trim().lastIndexOf(" "));
             } else {
                 paramList[i] = paramList[i].trim().split(" ")[0];
             }
 
         }
         parameter = Joiner.on(", ").join(paramList);
-        result = belongClassName + "." + shortName + "(" + parameter + ")";
+        result = belongClassName + "." + simpleName + "(" + parameter + ")";
         return result;
     }
 
@@ -146,7 +148,8 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
             //String belongClassName = parentClass.resolve().getQualifiedName();
             String belongClassName = parentClass.getFullyQualifiedName().get();
             String full_declaration = m.getDeclarationAsString();
-            methodName = getMethodName(belongClassName, full_declaration);
+            String shortName = getShortName(m);
+            methodName = getMethodName(belongClassName, full_declaration,shortName);
             return methodName;
         }
     }
@@ -188,7 +191,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
             ClassOrInterfaceDeclaration parentClass = (ClassOrInterfaceDeclaration) getAncestorNodeClassOrInterFaceDeclaration(m, 0);
             if (parentClass != null) {
                 belongClassName = parentClass.getFullyQualifiedName().get();
-                System.out.println("className: " + belongClassName);
+//                System.out.println("className: " + belongClassName);
             }
             if (belongClassName != null) {
                 return belongClassName;
@@ -342,7 +345,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                     throwsCodeDirective.add(cd);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         }
         return throwsCodeDirective;
@@ -393,7 +396,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                 return getAncestorNodeClassOrInterFaceDeclaration(methodDeclaration.getParentNode().get(), recursionCount);
             }
         } else {
-            System.out.println("No parentNode, recursionCount: " + recursionCount);
+//            System.out.println("No parentNode, recursionCount: " + recursionCount);
             return null;
         }
     }

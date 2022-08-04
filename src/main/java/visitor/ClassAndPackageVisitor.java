@@ -92,9 +92,9 @@ public class ClassAndPackageVisitor {
                 Optional<String> classOrInterfaceNameOptional = classOrInterfaceDeclaration.getFullyQualifiedName();
                 if (classOrInterfaceNameOptional.isPresent())
                     classOrInterfaceName = classOrInterfaceDeclaration.getFullyQualifiedName().get();
-                if (classOrInterfaceName.equals("java.lang.Object")) {
-                    System.out.println(classOrInterfaceName);
-                }
+//                if (classOrInterfaceName.equals("java.lang.Object")) {
+//                    System.out.println(classOrInterfaceName);
+//                }
                 boolean isInterface = classOrInterfaceDeclaration.isInterface();
                 boolean containsInheritdoc = false;
                 Optional<Comment> commentOptional = classOrInterfaceDeclaration.getComment();
@@ -102,12 +102,12 @@ public class ClassAndPackageVisitor {
                 if (commentOptional.isPresent()) {
                     class_comment = commentOptional.get().getContent();
                 }
-                System.out.println(Strings.repeat("=", classOrInterfaceName.length()));
+//                System.out.println(Strings.repeat("=", classOrInterfaceName.length()));
                 if (isInterface) {
-                    System.out.println("interface " + classOrInterfaceName);
+//                    System.out.println("interface " + classOrInterfaceName);
                     addClassModel(classOrInterfaceName, name, INTERFACE_ENTITY, description, class_comment, commentList);
                 } else {
-                    System.out.println("Class " + classOrInterfaceName);
+//                    System.out.println("Class " + classOrInterfaceName);
                     addClassModel(classOrInterfaceName, name, CLASS_ENTITY, description, class_comment, commentList);
                 }
                 if (!packageName.equals("")) addRelationModelList(classOrInterfaceName, packageName, BELONGTO);
@@ -117,11 +117,11 @@ public class ClassAndPackageVisitor {
                     try {
                         extendName = extendedType.resolve().getQualifiedName();
                     } catch (UnsolvedSymbolException e) {
-                        System.err.println("UnsolvedSymbolException");
+//                        System.err.println("UnsolvedSymbolException");
                         extendName = extendedType.toString();
 //                        e.printStackTrace();
                     }
-                    System.out.println("extend " + extendName);
+//                    System.out.println("extend " + extendName);
                     addRelationModelList(classOrInterfaceName, extendName, EXTEND);
                 }
                 List<ClassOrInterfaceType> implementedTypeList = classOrInterfaceDeclaration.getImplementedTypes();
@@ -132,10 +132,10 @@ public class ClassAndPackageVisitor {
                         //                    修复UnsolvedSymbolException异常
                     } catch (UnsolvedSymbolException e) {
 //                        e.printStackTrace();
-                        System.err.println("UnsolvedSymbolException");
+//                        System.err.println("UnsolvedSymbolException");
                         interfaceName=implementedType.toString();
                     }
-                    System.out.println("implemented " + interfaceName);
+//                    System.out.println("implemented " + interfaceName);
                     addRelationModelList(classOrInterfaceName, interfaceName, IMPLEMENT);
 
                 }
@@ -148,14 +148,14 @@ public class ClassAndPackageVisitor {
                 // add field
                 List<FieldDeclaration> fieldDeclarationList = classOrInterfaceDeclaration.getFields();
                 for (FieldDeclaration fieldDeclaration : fieldDeclarationList) {
-                    System.out.println("fieldDeclaration: " + fieldDeclaration.getModifiers());
+//                    System.out.println("fieldDeclaration: " + fieldDeclaration.getModifiers());
                     List<Modifier> modifierList = fieldDeclaration.getModifiers();
                     StringBuilder declaration = new StringBuilder();
                     String comment = "";
 
                     for (Modifier m : modifierList) {
                         declaration.append(m.toString());
-                        System.out.println("modifierList: " + m.toString());
+//                        System.out.println("modifierList: " + m.toString());
                     }
                     List<VariableDeclarator> variables = fieldDeclaration.getVariables();
                     for (VariableDeclarator v : variables) {
@@ -175,7 +175,7 @@ public class ClassAndPackageVisitor {
                         declaration.append(valTypeName);
                         declaration.append(" ");
                         declaration.append(v.toString());
-                        System.out.println("declaration: " + declaration);
+//                        System.out.println("declaration: " + declaration);
                         comment = fieldDeclaration.toString().replace(declaration.toString() + ";", "");
                         FieldModel fieldModel = new FieldModel();
                         fieldModel.setId(fieldId);
@@ -183,9 +183,9 @@ public class ClassAndPackageVisitor {
                         fieldModel.setField_name(d.getName());
                         fieldModel.setFull_declaration(declaration.toString());
                         fieldModel.setComment(comment);
-                        if (fieldId == 282) {
-                            System.out.println(fieldId);
-                        }
+//                        if (fieldId == 282) {
+//                            System.out.println(fieldId);
+//                        }
                         addFieldRelationModelList(classOrInterfaceName, fieldId.toString(), Field_In_Class);
                         fieldModelArrayList.add(fieldModel);
                         fieldId++;
@@ -232,13 +232,13 @@ public class ClassAndPackageVisitor {
 
 
     public void cleanAll() {
-        System.out.println("start clean");
+//        System.out.println("start clean");
         entityModelSet.clear();
         classModelSet.clear();
         relationModelList.clear();
-        recordName.clear();
         fieldModelArrayList.clear();
         fieldRelationModelList.clear();
-        System.out.println("clean finish");
+        recordName.clear();
+//        System.out.println("clean finish");
     }
 }

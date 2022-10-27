@@ -148,7 +148,11 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
             //String belongClassName = parentClass.resolve().getQualifiedName();
             String belongClassName = parentClass.getFullyQualifiedName().get();
             String full_declaration = m.getDeclarationAsString();
+<<<<<<< HEAD
             String shortName = m.getName().asString();
+=======
+            String shortName = getShortName(m);
+>>>>>>> 4ddead6 (84修复)
             methodName = getMethodName(belongClassName, full_declaration,shortName);
             return methodName;
         }

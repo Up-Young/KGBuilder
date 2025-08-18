@@ -1,103 +1,103 @@
 # APISrcParser
 
-## 1. Project Overview
+## 1. 项目概述
 
-APISrcParser is a Java-based command-line tool designed to parse Java source code. It utilizes the `javaparser` library to analyze Java files, extracting detailed information about classes, methods, fields, and the relationships between them. The extracted data is then serialized into structured JSON files, making it suitable for further analysis, documentation generation, or integration with other tools.
+APISrcParser 是一个基于 Java 的命令行工具，用于解析 Java 源代码。它利用 `javaparser` 库来分析 Java 文件，提取关于类、方法、字段及其之间关系的详细信息。提取的数据随后被序列化为结构化的 JSON 文件，使其适用于进一步的分析、文档生成或与其他工具集成。
 
-The tool can handle both single and multiple Java projects, providing a flexible way to process codebases of varying sizes and structures.
+该工具可以处理单个和多个 Java 项目，为处理不同规模和结构的代码库提供了一种灵活的方式。
 
-## 2. Features
+## 2. 功能特性
 
-- **Source Code Parsing:** Parses `.java` files to extract Abstract Syntax Tree (AST) information.
-- **API Information Extraction:** Identifies and extracts data for:
-    - Packages
-    - Classes and Interfaces
-    - Methods
-    - Fields
-- **Relationship Analysis:** Determines relationships between different code elements, such as:
-    - Class/interface and package relationships
-    - Field and class relationships
-- **JSON Output:** Exports all extracted information into a set of well-structured JSON files.
-- **Flexible Project Handling:** Supports parsing a single project or a directory containing multiple projects.
-- **Command-Line Interface:** Easy to use via a simple command-line interface.
+- **源代码解析:** 解析 `.java` 文件以提取抽象语法树 (AST) 信息。
+- **API 信息提取:** 识别并提取以下数据：
+    - 包
+    - 类和接口
+    - 方法
+    - 字段
+- **关系分析:** 确定不同代码元素之间的关系，例如：
+    - 类/接口与包的关系
+    - 字段与类的关系
+- **JSON 输出:** 将所有提取的信息导出为一组结构良好的 JSON 文件。
+- **灵活的项目处理:** 支持解析单个项目或包含多个项目的目录。
+- **命令行界面:** 通过简单的命令行界面易于使用。
 
-## 3. Requirements
+## 3. 环境要求
 
-To build and run APISrcParser, you will need the following:
+要构建和运行 APISrcParser，您将需要以下环境：
 
-- **Java Development Kit (JDK):** Version 1.8 or higher.
-- **Apache Maven:** To manage dependencies and build the project.
+- **Java 开发工具包 (JDK):** 1.8 或更高版本。
+- **Apache Maven:** 用于管理依赖项和构建项目。
 
-## 4. How to Build
+## 4. 如何构建
 
-You can build the project from the source to generate a runnable JAR file. This file will contain all the necessary dependencies.
+您可以从源代码构建项目以生成可运行的 JAR 文件。该文件将包含所有必需的依赖项。
 
-1.  Clone the repository or download the source code.
-2.  Navigate to the root directory of the project in your terminal.
-3.  Run the following Maven command:
+1.  克隆仓库或下载源代码。
+2.  在您的终端中，导航到项目的根目录。
+3.  运行以下 Maven 命令：
 
     ```bash
     mvn package
     ```
 
-4.  Upon successful completion, the runnable JAR file, `APISrcParser-1.0-SNAPSHOT.jar`, will be created in the `target` directory.
+4.  成功完成后，可运行的 JAR 文件 `APISrcParser-1.0-SNAPSHOT.jar` 将在 `target` 目录中创建。
 
-## 5. How to Run
+## 5. 如何运行
 
-You can run the tool from the command line using `java -jar`.
+您可以使用 `java -jar` 从命令行运行该工具。
 
-### Command-Line Options
+### 命令行选项
 
-| Option             | Short | Description                                                                                             |
+| 选项             | 简称 | 描述                                                                                             |
 | ------------------ | ----- | ------------------------------------------------------------------------------------------------------- |
-| `--input-dir`      | `-i`  | **Required.** Specifies the input directory containing the Java source code to be parsed.                 |
-| `--output-dir`     | `-o`  | Specifies the directory where the output JSON files will be saved. Defaults to `./output`.                |
-| `--multi-project`  | `-mp` | Treats each subdirectory within the input directory as a separate project, generating separate outputs. |
-| `--version`        | `-v`  | Prints the version of the tool.                                                                         |
-| `--help`           | `-h`  | Prints the help message with all command-line options.                                                  |
+| `--input-dir`      | `-i`  | **必需。** 指定包含要解析的 Java 源代码的输入目录。                 |
+| `--output-dir`     | `-o`  | 指定将保存输出 JSON 文件的目录。默认为 `./output`。                |
+| `--multi-project`  | `-mp` | 将输入目录中的每个子目录视为一个独立的项目，并为每个项目生成单独的输出。 |
+| `--version`        | `-v`  | 打印工具的版本号。                                                                         |
+| `--help`           | `-h`  | 打印包含所有命令行选项的帮助消息。                                                  |
 
-### Examples
+### 示例
 
-#### Parsing a Single Project
+#### 解析单个项目
 
-To parse a single project located in `srcCode/applet`, and save the results to the default `output` directory:
+要解析位于 `srcCode/applet` 的单个项目，并将结果保存到默认的 `output` 目录：
 
 ```bash
 java -jar target/APISrcParser-1.0-SNAPSHOT.jar -i srcCode/applet
 ```
 
-To specify a custom output directory, for example `my-output`:
+要指定自定义输出目录，例如 `my-output`：
 
 ```bash
 java -jar target/APISrcParser-1.0-SNAPSHOT.jar -i srcCode/applet -o my-output
 ```
 
-#### Parsing Multiple Projects
+#### 解析多个项目
 
-If you have a directory (`srcCode`) containing multiple project subdirectories (`applet`, `another-project`), you can parse them all at once using the `-mp` flag.
+如果您有一个目录 (`srcCode`) 包含多个项目子目录 (`applet`, `another-project`)，您可以使用 `-mp` 标志一次性解析所有项目。
 
 ```bash
 java -jar target/APISrcParser-1.0-SNAPSHOT.jar -i srcCode -mp
 ```
 
-This will create a corresponding subdirectory for each project within the output directory (`output/applet`, `output/another-project`).
+这将在输出目录中为每个项目创建一个对应的子目录 (`output/applet`, `output/another-project`)。
 
-## 6. Input Structure
+## 6. 输入结构
 
--   **Single Project:** The input directory should contain the Java source files (`.java`). The tool will recursively find all Java files within this directory.
--   **Multiple Projects:** The input directory should contain one or more subdirectories. Each subdirectory is treated as an independent project.
+-   **单个项目:** 输入目录应包含 Java 源文件 (`.java`)。该工具将递归地查找此目录中的所有 Java 文件。
+-   **多个项目:** 输入目录应包含一个或多个子目录。每个子目录都被视为一个独立的项目。
 
-## 7. Output Structure
+## 7. 输出结构
 
-The tool generates a series of JSON files in the specified output directory. If parsing multiple projects, a subdirectory is created for each project.
+该工具在指定的输出目录中生成一系列 JSON 文件。如果解析多个项目，则会为每个项目创建一个子目录。
 
-The output files include:
+输出文件包括：
 
--   `Packages.json`: Information about all packages.
--   `ClassOrInterfaces.json`: Details about each class and interface.
--   `MethodAll.json`: Details about all methods.
--   `FieldsInClass.json`: Details about fields within classes.
--   `ClassOrInterfaceAndPackageRelations.json`: Describes which package each class/interface belongs to.
--   `FieldsAndClassRelations.json`: Describes which class each field belongs to.
+-   `Packages.json`: 所有包的信息。
+-   `ClassOrInterfaces.json`: 每个类和接口的详细信息。
+-   `MethodAll.json`: 所有方法的详细信息。
+-   `FieldsInClass.json`: 类中字段的详细信息。
+-   `ClassOrInterfaceAndPackageRelations.json`: 描述每个类/接口所属的包。
+-   `FieldsAndClassRelations.json`: 描述每个字段所属的类。
 
-This structured output allows for easy consumption by other programs for further analysis or visualization.
+这种结构化的输出允许其他程序轻松使用以进行进一步的分析或可视化。
